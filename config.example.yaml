@@ -1,0 +1,47 @@
+# Example configuration for Satellite-Guided DDColor.
+# Copy this file to config.yaml and edit paths for your local machine.
+
+dataset:
+  root: "PATH/TO/CVUSA_processed_split"
+
+training:
+  batch_size: 4
+  epochs: 30
+  lr: 0.0001
+  weight_decay: 0.0001
+  min_lr: 0.000001
+  num_workers: 0
+  use_amp: true
+  log_interval: 50
+  save_interval: 1
+  seed: 42
+  validate_lpips: false
+  validate_fid: false
+
+model:
+  context_dim: 512
+  polar_encoder_pretrained: true
+  correction_type: "light"
+  residual_scale: 0.1
+  polar_input_size: [256, 512]
+  use_film: true
+
+ddcolor:
+  weights_path: "PATH/TO/DDColor/weights_hf/ddcolor_paper_tiny/pytorch_model.bin"
+  code_path: "PATH/TO/DDColor"
+  input_size: 256
+
+loss:
+  l1_weight: 1.0
+  perceptual_weight: 0.5
+  residual_weight: 0.1
+  use_perceptual: true
+
+paths:
+  checkpoint_base_dir: "checkpoints"
+  output_base_dir: "outputs"
+
+gradio:
+  server_name: "0.0.0.0"
+  server_port: 7861
+  share: false

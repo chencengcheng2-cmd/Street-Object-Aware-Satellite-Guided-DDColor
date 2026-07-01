@@ -1,0 +1,70 @@
+﻿# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local configs and secrets
+config.yaml
+*.local.yaml
+.env
+
+# Share only example configs; keep local paths private
+configs/*.yaml
+!configs/*.example.yaml
+
+# Local machine-specific experiment configs
+configs/*_server.yaml
+configs/*_local.yaml
+
+# Datasets and third-party checkouts
+data/
+dataset/
+datasets/
+CVUSA_processed_split/
+Dataset_CVUSA/
+third_party/DDColor/*
+!third_party/DDColor/README.md
+!third_party/DDColor/.gitkeep
+
+# Training artifacts and checkpoints
+checkpoints/**
+!checkpoints/
+!checkpoints/README.md
+!checkpoints/.gitkeep
+outputs/**
+!outputs/
+!outputs/README.md
+!outputs/.gitkeep
+output/
+logs/
+*.log
+
+# Large ML artifacts
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.onnx
+*.bin
+
+# Generated reports / temporary files
+paper_draft/*.aux
+paper_draft/*.log
+paper_draft/*.out
+paper_draft/*.toc
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+paper_draft/

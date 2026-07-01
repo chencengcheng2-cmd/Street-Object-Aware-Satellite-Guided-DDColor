@@ -1,0 +1,127 @@
+﻿# Example config for Street-Object-Aware Satellite-Guided DDColor v17.
+# Copy this file to configs/satellite_constrained_v17.yaml and edit local paths.
+
+dataset:
+  root: "data/CVUSA_processed_split"
+
+semantic:
+  load_precomputed: true
+  street_dirname: "street_dinov3_semantic_v16"
+  satellite_dirname: "overhead_satellite_dinov3_semantic_v16"
+
+training:
+  batch_size: 8
+  epochs: 30
+  lr: 0.00006
+  weight_decay: 0.0001
+  min_lr: 0.000001
+  num_workers: 8
+  use_amp: true
+  log_interval: 50
+  save_interval: 1
+  seed: 42
+  validate_lpips: false
+  validate_fid: false
+  init_from: null
+
+satellite_dependency:
+  enabled: true
+  weight: 1.20
+  margin: 0.06
+  warmup_epochs: 0
+  mask_sky: true
+  negative_modes: ["wrong", "gray", "channel_shuffle"]
+
+semantic_color_consistency:
+  enabled: true
+  weight: 0.25
+  min_pixels: 128
+  class_weights:
+    1: 0.70
+    2: 0.25
+    3: 1.00
+    4: 1.00
+    6: 0.15
+
+semantic_gate_prior:
+  enabled: true
+  weight: 0.08
+  min_pixels: 128
+  targets:
+    0: 0.00
+    1: 0.75
+    2: 0.35
+    3: 0.85
+    4: 0.85
+    5: 0.00
+    6: 0.20
+
+modulation_focus:
+  enabled: true
+  weight: 0.40
+  strength: 2.5
+  gate_weight: 0.10
+  preserve_weight: 0.05
+  threshold: 0.05
+  temperature: 0.035
+
+panorama_consistency:
+  enabled: true
+  weight: 0.12
+  classes: [1, 2, 3, 4]
+  min_pixels: 256
+
+model:
+  context_dim: 512
+  polar_encoder_pretrained: true
+  satellite_encoder_pretrained: true
+  correction_type: "satellite_detail_bottleneck_v15"
+  residual_scale: 1.0
+  polar_input_size: [256, 512]
+  satellite_input_size: [512, 512]
+  use_film: false
+  use_polar_context: false
+
+  use_lane_vit: false
+  use_satellite_vit: false
+  use_cross_view_vit: false
+  use_semantic_cross_view_vit: false
+  use_semantic_cnn_context: false
+  use_semantic_color_token_match: false
+  use_polar_token_match: false
+  semantic_num_classes: 7
+
+  street_object_hidden_dim: 64
+  street_object_num_masks: 8
+  street_object_detail_scale: 0.16
+  satellite_prior_strength: 0.95
+  use_street_gray_edges: true
+  use_street_gray_modulation: false
+  use_gray_satellite_token_selection: false
+  token_selection_patch_size: 16
+  token_selection_dim: 48
+  lane_detail_strength: 0.65
+  satellite_dependency_boost: 1.60
+  lane_evidence_threshold: 0.001
+  street_semantic_source: "dino_v16"
+  satellite_semantic_source: "dinov3_v16"
+  dino_model_name: "vit_small_patch16_224.dino"
+  dino_pretrained: true
+
+ddcolor:
+  code_path: "third_party/DDColor"
+  weights_path: "third_party/DDColor/weights_hf/ddcolor_paper_tiny/pytorch_model.bin"
+  input_size: 256
+
+loss:
+  l1_weight: 1.0
+  perceptual_weight: 0.35
+  residual_weight: 0.01
+  lane_marking_weight: 2.5
+  edge_weight: 0.12
+  detail_color_weight: 0.30
+  satellite_dependency_weight: 1.20
+  semantic_color_consistency_weight: 0.25
+  semantic_gate_prior_weight: 0.08
+  modulation_focus_weight: 0.40
+  panorama_consistency_weight: 0.12

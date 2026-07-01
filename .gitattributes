@@ -1,0 +1,11 @@
+* text=auto
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.pth binary
+*.pt binary
+*.ckpt binary
+*.safetensors binary
+*.onnx binary
+*.bin binary
