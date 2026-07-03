@@ -12,6 +12,14 @@ The project uses paired street-view panorama patches and overhead satellite imag
 
 ![Dataset examples](docs/assets/dataset_showcase.jpg)
 
+## Semantic Segmentation Inputs
+
+SOA relies on semantic masks to separate **where** color should be corrected from **what color prior** should be imported from the satellite image.
+
+In the current implementation, the satellite-side semantic segmentation is explicitly trained for overhead images and is more reliable for roads, buildings, vegetation, and open ground. The street-view semantic segmentation is less stable, especially around roads, vegetation boundaries, buildings, poles, and small objects. This is a known limitation of the current model.
+
+![Semantic segmentation examples](docs/assets/semantic_segmentation_showcase.jpg)
+
 ## Qualitative Results
 
 The SOA model keeps DDColor frozen and learns a satellite-constrained residual correction. The comparison below shows grayscale input, DDColor base output, SOA final output, and ground-truth RGB.
@@ -20,9 +28,32 @@ The SOA model keeps DDColor frozen and learns a satellite-constrained residual c
 
 ## Metric Snapshot
 
-The following chart summarizes representative validation metrics recorded during the project. SOA/v17 is designed primarily for satellite dependency and shortcut resistance, so PSNR alone should not be treated as the only criterion.
+The following chart summarizes representative validation metrics recorded during the project. It also includes the original DDColor baseline parameters:
+
+```text
+Original DDColor:
+PSNR  = 23.9258
+SSIM  = 0.9570
+LPIPS = 0.1604
+FID   = 15.1953
+```
+
+SOA/v17 is designed primarily for satellite dependency and shortcut resistance, so PSNR alone should not be treated as the only criterion.
 
 ![Metric comparison](docs/assets/metric_improvement.jpg)
+
+## Ablation Study Summary
+
+The SOA design was evaluated through ablation-style comparisons with earlier model variants and satellite dependency tests.
+
+Key findings:
+
+- Free feature fusion can improve PSNR, but it can still learn a shortcut from grayscale street-view structure to RGB street-view color.
+- Adding a semantic color bottleneck forces satellite information to enter the model as region-level color priors.
+- Adding a semantic confidence gate limits where satellite color is allowed to affect the output.
+- Adding satellite dependency loss verifies whether the output changes when the satellite input is correct, wrong, grayscale, or color-shuffled.
+
+In other words, SOA passes the intended ablation criterion when the result depends more strongly on the correct satellite image than on incorrect or color-destroyed satellite inputs.
 
 ## Core Idea
 
