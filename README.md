@@ -2,9 +2,27 @@
 
 Street-Object-Aware Satellite-Guided DDColor is a satellite-constrained residual colorization framework for street-view grayscale image colorization. It uses frozen DDColor as a stable base colorizer, then applies satellite-guided residual correction through semantic color priors and confidence gating.
 
-This repository focuses on the v17 model variant.
+This repository focuses on the SOA model, short for **Street-Object-Aware Satellite-Guided DDColor**. In the development history, this model corresponds to the v17 variant.
 
 ![V17 pipeline](docs/assets/v17_pipeline_readme.png)
+
+## Dataset Examples
+
+The project uses paired street-view panorama patches and overhead satellite images. Each panorama is represented by four street-view patches, while the satellite image provides global overhead context.
+
+![Dataset examples](docs/assets/dataset_showcase.jpg)
+
+## Qualitative Results
+
+The SOA model keeps DDColor frozen and learns a satellite-constrained residual correction. The comparison below shows grayscale input, DDColor base output, SOA final output, and ground-truth RGB.
+
+![Qualitative comparison](docs/assets/result_comparison.jpg)
+
+## Metric Snapshot
+
+The following chart summarizes representative validation metrics recorded during the project. SOA/v17 is designed primarily for satellite dependency and shortcut resistance, so PSNR alone should not be treated as the only criterion.
+
+![Metric comparison](docs/assets/metric_improvement.jpg)
 
 ## Core Idea
 
@@ -16,9 +34,9 @@ Satellite image tells color.
 DDColor provides the base colorization.
 ```
 
-Instead of allowing the network to freely learn a direct mapping from grayscale street-view images to ground-truth RGB images, v17 constrains satellite information through semantic color prototypes and dependency losses.
+Instead of allowing the network to freely learn a direct mapping from grayscale street-view images to ground-truth RGB images, SOA constrains satellite information through semantic color prototypes and dependency losses.
 
-## V17 Pipeline
+## SOA Pipeline
 
 ```text
 Street-view grayscale patch
@@ -69,7 +87,7 @@ final_rgb = clamp(base_rgb + delta_color, 0, 1)
 
 ## Shortcut Prevention
 
-v17 includes several mechanisms to reduce direct shortcut learning from grayscale street-view images to RGB ground truth:
+SOA includes several mechanisms to reduce direct shortcut learning from grayscale street-view images to RGB ground truth:
 
 1. DDColor is frozen.
 2. Satellite information is passed through semantic color prototypes instead of unconstrained image fusion.
@@ -96,7 +114,7 @@ docs/assets/                   Selected documentation figures
 The following files are intentionally not tracked by Git:
 
 - CVUSA / CVACT / custom datasets
-- trained project checkpoints, including v17 `best.pth`
+- trained project checkpoints, including SOA/v17 `best.pth`
 - official DDColor source code
 - official DDColor pretrained weights
 - generated logs and output images
@@ -122,9 +140,9 @@ third_party/DDColor/
 
 You can also store DDColor elsewhere and update the paths in your config file.
 
-### 2. v17 checkpoint
+### 2. SOA checkpoint
 
-Place the trained v17 checkpoint here:
+Place the trained SOA/v17 checkpoint here:
 
 ```text
 checkpoints/satellite_constrained_v17_server/best.pth
@@ -194,7 +212,7 @@ Verify CUDA:
 
 ## Configuration
 
-Copy the example v17 config:
+Copy the example SOA/v17 config:
 
 ```powershell
 Copy-Item configs\satellite_constrained_v17.example.yaml configs\satellite_constrained_v17.yaml
@@ -249,7 +267,7 @@ Common metrics include PSNR, SSIM, LPIPS, and FID when the corresponding depende
 ## Notes
 
 - This project is a research prototype.
-- The v17 method improves satellite dependency compared with unconstrained fusion, but it still depends on semantic mask quality.
+- The SOA method improves satellite dependency compared with unconstrained fusion, but it still depends on semantic mask quality.
 - Very fine lane markings may remain difficult when they are not visible or not reliable in the satellite image.
 - Sky and vehicle regions are intentionally treated differently because they are not directly explained by satellite imagery.
 
