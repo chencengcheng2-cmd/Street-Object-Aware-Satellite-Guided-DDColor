@@ -4,7 +4,7 @@ Street-Object-Aware Satellite-Guided DDColor is a satellite-constrained residual
 
 This repository focuses on the v17 model variant.
 
-![V17 pipeline](docs/assets/v17_overall_flowchart_en_clean.png)
+![V17 pipeline](docs/assets/v17_pipeline_readme.png)
 
 ## Core Idea
 
